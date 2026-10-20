@@ -1,0 +1,477 @@
+@import "tailwindcss";
+
+:root {
+  /* ---- West Quest "Terracotta Ledger" design tokens ----------------------
+     Warm cream page, espresso ink, a fired-clay brand colour for everything
+     clickable and a deep teal accent for financing figures (daily rates,
+     "in stock", VIP). Cards carry no borders — they sit on the page with a
+     soft warm shadow. Signature details: a punched price-tag hole on cards
+     (.tag-hole), a single tag-corner cut on marketing panels (.tag-corner),
+     and the two-dot ledger tick (.ledger-tick). */
+
+  /* Neutrals */
+  --background: #fbf6ee;
+  --foreground: #241a12;
+  --surface: #fffdf9;
+  --surface-muted: #f4ecdf;
+  --border: #ebe0cf;
+  --border-strong: #d9c7ad;
+  --muted: #75655a;
+  --ink: #241a12;
+  --ink-inverse: #ffffff;
+
+  /* Brand — fired clay. White text on #b5481f is ~5.4:1. */
+  --brand: #b5481f;
+  --brand-strong: #923716;
+  --brand-050: #fbebe2;
+  --brand-foreground: #ffffff;
+
+  /* Accent — deep teal, for money figures and positive states. */
+  --accent: #1f6b5c;
+  --accent-strong: #17544a;
+  --accent-050: #e4f0ec;
+  --accent-foreground: #ffffff;
+
+  /* Glow — warm apricot, dark-panel-only. */
+  --glow: #f2c48d;
+  --glow-foreground: #2a1608;
+
+  /* Status */
+  --success: #1f7a4d;
+  --success-050: #e6f3ea;
+  --whatsapp: #25d366;
+  --danger: #c0281c;
+  --danger-050: #fdf0ee;
+  --warning: #a8560b;
+  --warning-050: #fdf5e8;
+
+  /* Dark panels — espresso, not black */
+  --panel-dark: #21170f;
+  --panel-dark-2: #2f2218;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 9999px;
+
+  /* Warm, low-spread shadows — these replace borders as the card edge */
+  --shadow-sm: 0 1px 2px rgba(60, 36, 16, 0.06);
+  --shadow-md: 0 1px 2px rgba(60, 36, 16, 0.04), 0 10px 28px -14px rgba(60, 36, 16, 0.22);
+  --shadow-lg: 0 2px 4px rgba(60, 36, 16, 0.05), 0 22px 44px -18px rgba(60, 36, 16, 0.3);
+  --shadow-xl: 0 30px 70px -24px rgba(60, 36, 16, 0.35);
+
+  --z-nav: 50;
+  --z-tabbar: 45;
+  --z-drawer: 60;
+  --z-modal: 80;
+  --z-toast: 100;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-ink: var(--ink);
+  --color-ink-inverse: var(--ink-inverse);
+
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-050: var(--brand-050);
+  --color-brand-foreground: var(--brand-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-050: var(--accent-050);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-glow: var(--glow);
+  --color-glow-foreground: var(--glow-foreground);
+
+  --color-success: var(--success);
+  --color-success-050: var(--success-050);
+  --color-whatsapp: var(--whatsapp);
+  --color-danger: var(--danger);
+  --color-danger-050: var(--danger-050);
+  --color-warning: var(--warning);
+  --color-warning-050: var(--warning-050);
+
+  --color-panel-dark: var(--panel-dark);
+  --color-panel-dark-2: var(--panel-dark-2);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+
+  --font-sans: var(--font-instrument);
+  --font-display: var(--font-newsreader);
+  --font-mono: var(--font-plex-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--brand);
+  color: white;
+}
+
+/* In the base layer so component utilities (e.g. a field that shows focus
+   with its own ring) can override it. */
+@layer base {
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+}
+
+/* ---- Component layer -------------------------------------------------- */
+@layer components {
+  .section {
+    @apply mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .card {
+    @apply rounded-2xl bg-surface shadow-md;
+  }
+
+  .field,
+  .input {
+    @apply w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-ink outline-none transition-colors;
+    @apply placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/10;
+  }
+  .field:disabled,
+  .input:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  /* Admin data-entry controls: compact, square-ish, clear focus ring.
+     Used with the FormKit components (components/admin/FormKit.tsx). */
+  .admin-input {
+    @apply h-10 w-full rounded-[8px] border border-border-strong/80 bg-white px-3 text-sm text-ink outline-none transition-[border-color,box-shadow];
+    @apply placeholder:text-muted/60 hover:border-border-strong focus:border-ink focus:ring-4 focus:ring-ink/10;
+  }
+  textarea.admin-input {
+    @apply h-auto min-h-24 py-2.5 leading-relaxed;
+  }
+  select.admin-input {
+    @apply cursor-pointer appearance-none pr-9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b6880' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right 0.7rem center;
+    background-repeat: no-repeat;
+  }
+  .admin-input:disabled {
+    @apply cursor-not-allowed bg-surface-muted text-muted hover:border-border-strong/80;
+  }
+  .admin-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  .admin-input[type="number"]::-webkit-inner-spin-button,
+  .admin-input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+  /* Input group with a prefix/suffix; the inner input is borderless. */
+  .admin-affix {
+    @apply flex h-10 w-full items-center rounded-[8px] border border-border-strong/80 bg-white transition-[border-color,box-shadow];
+    @apply hover:border-border-strong focus-within:border-ink focus-within:ring-4 focus-within:ring-ink/10;
+  }
+  .admin-affix > input {
+    @apply h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-ink outline-none placeholder:text-muted/60;
+  }
+  .admin-affix > input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  .admin-affix > input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-dark,
+  .btn-whatsapp,
+  .btn-glow {
+    @apply inline-flex cursor-pointer select-none items-center justify-center gap-2 rounded-[10px] px-5 py-2.5 text-sm font-semibold transition-colors;
+    @apply disabled:pointer-events-none disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-brand text-white shadow-sm hover:bg-brand-strong;
+  }
+  .btn-secondary {
+    @apply bg-surface-muted text-ink hover:bg-brand-050 hover:text-brand;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-ink hover:bg-black/5;
+  }
+  .btn-dark {
+    @apply bg-panel-dark text-white hover:bg-panel-dark-2;
+  }
+  .btn-whatsapp {
+    @apply bg-whatsapp text-white shadow-sm hover:brightness-95;
+  }
+  /* For CTAs on dark/panel-dark surfaces only — .btn-primary's fill
+     disappears against a dark background. */
+  .btn-glow {
+    @apply bg-glow text-glow-foreground shadow-sm hover:brightness-95;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-surface-muted px-3 py-1.5 text-xs font-medium text-ink/80 transition-colors hover:bg-brand-050 hover:text-brand;
+  }
+  .chip-active {
+    @apply bg-brand text-white hover:bg-brand-strong hover:text-white;
+  }
+
+  .badge {
+    @apply inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-[11px] font-semibold leading-none tracking-[0.01em] shadow-sm backdrop-blur-sm;
+  }
+
+  .card-hover {
+    @apply transition-[transform,box-shadow] duration-300 will-change-transform hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  /* ---- Signature shape language -----------------------------------------
+     .tag-corner: a single cut on the top-left corner, like a price tag —
+     for marketing panels only (clip-path also clips shadows, so never pair
+     it with a shadow-edged card). .tag-hole: the punched hole of a price
+     tag, drawn in the page colour near a card's top-left corner. */
+  .tag-corner {
+    clip-path: polygon(22px 0, 100% 0, 100% 100%, 0 100%, 0 22px);
+  }
+  .tag-corner-sm {
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+  }
+  /* A product photo shot on (near-)white: multiply it into the surface
+     beneath, lifting near-white (~248) backgrounds to pure white first so
+     they vanish instead of leaving a faint grey box. */
+  .blend-white {
+    mix-blend-mode: multiply;
+    filter: brightness(1.03);
+  }
+  .tag-hole {
+    position: relative;
+  }
+  .tag-hole::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 20;
+    width: 9px;
+    height: 9px;
+    border-radius: 9999px;
+    background: var(--background);
+    box-shadow: inset 0 1px 2px rgba(60, 36, 16, 0.35);
+    pointer-events: none;
+  }
+  /* A small two-dot corner mark — evokes a checked installment on a ledger. */
+  .ledger-tick {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+  }
+  .ledger-tick::before,
+  .ledger-tick::after {
+    content: "";
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .ledger-tick::before {
+    top: 0;
+    left: 0;
+  }
+  .ledger-tick::after {
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.skeleton {
+  border-radius: 0.5rem;
+  background-image: linear-gradient(
+    90deg,
+    var(--surface-muted) 0%,
+    #ece1d0 50%,
+    var(--surface-muted) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* ---- Utilities ------------------------------------------------------- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.pretty {
+  text-wrap: pretty;
+}
+
+/* iOS safe-area helpers for sticky bars */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-safe {
+  bottom: env(safe-area-inset-bottom);
+}
+
+/* ---- Animations ---------------------------------------------------- */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-18px) translateX(10px); }
+}
+.animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+@keyframes float-slower {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(16px) translateX(-14px); }
+}
+.animate-float-slower {
+  animation: float-slower 12s ease-in-out infinite;
+}
+
+/* Hero autoplay progress — one segment fills over the slide duration. */
+@keyframes hero-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.animate-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--surface-muted) 0%,
+    #ece1d0 50%,
+    var(--surface-muted) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.28); }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: pop 0.32s ease-out;
+}
+
+/* Infinite marquee — the track holds two identical copies of the content
+   so a -50% translate loops seamlessly. Pauses on hover. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 32s) linear infinite;
+  will-change: transform;
+}
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Slowly panning gradient wash (for the trust marquee band). */
+@keyframes gradient-pan {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.animate-gradient-pan {
+  background-size: 200% 100%;
+  animation: gradient-pan 14s linear infinite;
+}
+
+/* Diagonal light sheen that sweeps across a band. */
+@keyframes band-sheen {
+  0% { transform: translateX(-150%) skewX(-16deg); }
+  60%, 100% { transform: translateX(360%) skewX(-16deg); }
+}
+.band-sheen {
+  position: relative;
+}
+.band-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 16%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--sheen-color, rgba(255, 255, 255, 0.16)),
+    transparent
+  );
+  animation: band-sheen 7s ease-in-out infinite;
+}
+
+/* ---- Reduced motion ---------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .animate-float-slow,
+  .animate-float-slower,
+  .marquee-track,
+  .animate-gradient-pan,
+  .band-sheen::after {
+    animation: none !important;
+  }
+  .band-sheen::after {
+    display: none;
+  }
+  .marquee-track {
+    /* keep the strip readable when animation is off */
+    width: auto !important;
+  }
+}
