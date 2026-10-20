@@ -49,15 +49,8 @@ function buildUrl(path: string, query?: Query) {
   return qs ? `${url}?${qs}` : url;
 }
 
-/** Static preview build: no backend, catalogue served from a bundled snapshot. */
-export const STATIC_DEMO = process.env.NEXT_PUBLIC_STATIC_DEMO === "1";
-
 export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
   const method = opts.method ?? "GET";
-  if (STATIC_DEMO) {
-    const { staticApi } = await import("./staticCatalog");
-    return (await staticApi(method, path, opts.query)) as T;
-  }
   const headers: Record<string, string> = {};
   let body: BodyInit | undefined;
   if (opts.json !== undefined) {

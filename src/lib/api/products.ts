@@ -1,10 +1,6 @@
 import { api } from "./client";
 import type { PaymentPlan, Product, ProductBadge, ProductSpec } from "@/lib/types";
-import staticImages from "@/data/static-images.json";
 
-// Product photos are served as static files from /public/products when one
-// exists (scripts/export-static-catalog.mjs); the backend copy is the fallback.
-const STATIC_IMAGES = staticImages as Record<string, string[]>;
 
 interface RawProduct {
   id: number;
@@ -59,7 +55,7 @@ export function toProduct(r: RawProduct): Product {
     reviewCount: r.reviewCount,
     featured: r.featured,
     featureRank: r.featureRank,
-    images: STATIC_IMAGES[r.slug] ?? r.images ?? [],
+    images: r.images ?? [],
     paymentPlans: r.paymentPlans ?? [],
     updatedAt: r.updatedAt,
     active: r.active ?? true,

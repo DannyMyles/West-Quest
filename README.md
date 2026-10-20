@@ -40,32 +40,6 @@ application per plan item plus one cash order for the rest; the team confirms
 everything over WhatsApp (number in `src/lib/contact.ts`). Customers follow
 their applications and orders under **My orders** (`/account`).
 
-## Static preview (frontend-only deploy, e.g. Vercel)
-
-For sharing the site without the backend, build with
-`NEXT_PUBLIC_STATIC_DEMO=1`. The catalogue (products, categories, plans) is
-then read from `src/data/static-catalog.json` and every product photo from
-`public/products/<slug>/<n>.jpg`. Browsing, search, filters and the cart work
-normally; sign-in, My orders and checkout show a "preview" notice, and checkout
-offers to send the cart on WhatsApp instead. The admin needs the real backend.
-
-```bash
-# Vercel: set NEXT_PUBLIC_STATIC_DEMO=1 as an environment variable, then deploy.
-# Locally:
-NEXT_PUBLIC_STATIC_DEMO=1 npm run build && NEXT_PUBLIC_STATIC_DEMO=1 npm run start
-```
-
-The snapshot and photos come from the live backend (read-only — it never writes
-to the database). Refresh them after catalogue or photo changes:
-
-```bash
-npm run export:static   # backend must be running
-```
-
-Product cards always prefer the static photo when one exists (in every mode).
-To replace a photo, drop a new JPEG in at the same path
-(`public/products/<slug>/1.jpg`), or upload it in the admin and re-export.
-
 ## Where things live
 
 | Area | Path |
@@ -77,7 +51,6 @@ To replace a photo, drop a new JPEG in at the same path
 | Storefront routes | `src/app/(site)/` |
 | Admin dashboard | `src/app/admin/` |
 | Backend API client | `src/lib/api/`, `src/services/` |
-| Static preview snapshot + photo manifest | `src/data/`, `public/products/` |
 | Backend (Express + MariaDB): plans, applications, accounts, orders | separate repo: `West-Quest-backend` |
 
 ## Scripts
@@ -85,5 +58,4 @@ To replace a photo, drop a new JPEG in at the same path
 - `npm run dev` — dev server
 - `npm run build` / `npm run start` — production build
 - `npm run lint` — ESLint
-- `npm run export:static` — refresh the static catalogue snapshot + product photos
 # -West-Quest

@@ -4,9 +4,9 @@ import { fetchCategories } from "@/lib/api/categories";
 
 const base = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
-// Rebuilt at most once a minute. If the backend can't be reached, the request
-// throws instead of publishing a sitemap with missing products: Next keeps
-// serving the last good copy until the backend is back.
+// Rebuilt at most once a minute. If the backend can't be reached (e.g. during a
+// build with no backend), only the fixed pages are listed; products and
+// categories return on the next rebuild once the backend answers.
 export const revalidate = 60;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -23,7 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Only live data: hidden categories and products are excluded by the API itself.
-  const [categories, products] = await Promise.all([fetchCategories(), fetchAllProducts()]);
+  let categories: Awaited<ReturnType<typeof fetchCategories>> = [];
+  let products: Awaited<ReturnType<typeof fetchAllProducts>> = [];
+  try {
+    [categories, products] = await Promise.all([fetchCategories(), fetchAllProducts()]);
+  } catch {
+    return staticRoutes;
+  }
 
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((c) => ({
     url: `${base}/catalogue?category=${encodeURIComponent(c.slug)}`,
