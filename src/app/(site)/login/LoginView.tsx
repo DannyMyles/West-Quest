@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AuthPanel } from "@/components/account/AuthPanel";
 import { useAccount } from "@/context/AccountContext";
+import { STATIC_DEMO } from "@/lib/api/client";
+import { PreviewNotice } from "@/components/account/PreviewNotice";
 
 /** Only same-site paths are allowed as a post-login destination. */
 function safeNext(next: string | null) {
@@ -31,9 +33,13 @@ export function LoginView() {
           Sign in with your phone number to check out, follow your applications from review to approval, and see your order history.
         </p>
       </div>
-      <div className="mx-auto w-full max-w-md rounded-3xl bg-surface p-6 shadow-md sm:p-8">
-        <AuthPanel initialMode={params.get("mode") === "register" ? "register" : "signin"} onDone={() => router.replace(next)} />
-      </div>
+      {STATIC_DEMO ? (
+        <PreviewNotice />
+      ) : (
+        <div className="mx-auto w-full max-w-md rounded-3xl bg-surface p-6 shadow-md sm:p-8">
+          <AuthPanel initialMode={params.get("mode") === "register" ? "register" : "signin"} onDone={() => router.replace(next)} />
+        </div>
+      )}
     </div>
   );
 }

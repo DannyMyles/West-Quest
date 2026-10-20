@@ -40,6 +40,24 @@ application per plan item plus one cash order for the rest; the team confirms
 everything over WhatsApp (number in `src/lib/contact.ts`). Customers follow
 their applications and orders under **My orders** (`/account`).
 
+## Demo build (no backend, e.g. Vercel)
+
+If `BACKEND_URL` isn't set, the storefront builds in **demo mode**: it serves a
+curated snapshot of ~60 products (`src/data/static-catalog.json`, photos in
+`public/products/`) instead of calling the backend — so a frontend-only Vercel
+deploy works with no settings. Browsing, search, filters and the cart work;
+sign-in, My orders and checkout show a "preview" note, and checkout offers to
+send the cart on WhatsApp. Force the mode with `NEXT_PUBLIC_STATIC_DEMO=1` / `0`.
+
+Refresh the snapshot from the live backend (read-only — it never writes):
+
+```bash
+npm run export:static   # backend running; edit QUOTA in the script to change the mix
+```
+
+To use a different photo for a demo product, replace
+`public/products/<slug>/1.jpg` with a file of the same name.
+
 ## Where things live
 
 | Area | Path |
@@ -58,4 +76,5 @@ their applications and orders under **My orders** (`/account`).
 - `npm run dev` — dev server
 - `npm run build` / `npm run start` — production build
 - `npm run lint` — ESLint
+- `npm run export:static` — refresh the demo snapshot (~60 products + photos)
 # -West-Quest

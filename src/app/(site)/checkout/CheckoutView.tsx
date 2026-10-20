@@ -9,7 +9,8 @@ import { AuthPanel } from "@/components/account/AuthPanel";
 import { CartLine } from "@/components/cart/CartLine";
 import { CartSummary } from "@/components/cart/CartSummary";
 import { checkout, type Order } from "@/lib/api/account";
-import { ApiError } from "@/lib/api/client";
+import { ApiError, STATIC_DEMO } from "@/lib/api/client";
+import { PreviewNotice } from "@/components/account/PreviewNotice";
 import { whatsappLink } from "@/lib/contact";
 import { formatKES } from "@/lib/format";
 import type { Application } from "@/lib/types";
@@ -73,6 +74,27 @@ export function CheckoutView() {
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-start">
         <div className="space-y-6">
+          {STATIC_DEMO ? (
+            <PreviewNotice title="Preview — order on WhatsApp">
+              <a
+                href={whatsappLink(
+                  `Hi West Quest, I'd like to order:\n${items
+                    .map((i) =>
+                      i.mode === "plan"
+                        ? `• ${i.name} — ${i.tier === "vip" ? "VIP" : "Retail"} plan, ${i.termMonths} months (${formatKES(i.depositAmount)} deposit, ${formatKES(i.dailyAmount)}/day)`
+                        : `• ${i.quantity} × ${i.name} — ${formatKES(i.rrp * i.quantity)}`
+                    )
+                    .join("\n")}`
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-whatsapp h-12 px-6"
+              >
+                Send my order on WhatsApp
+              </a>
+            </PreviewNotice>
+          ) : (
+          <>
           <Step n={1} title="Your account" done={Boolean(customer)}>
             {loading ? (
               <div className="h-24 animate-shimmer rounded-2xl" />
@@ -127,6 +149,8 @@ export function CheckoutView() {
               </div>
             </Step>
           </form>
+          </>
+          )}
         </div>
 
         <aside className="rounded-3xl bg-surface p-6 shadow-md lg:sticky lg:top-32">
@@ -144,10 +168,12 @@ export function CheckoutView() {
               {error}
             </p>
           )}
+          {!STATIC_DEMO && (
           <button type="submit" form="checkout-form" disabled={!customer || busy || !ready} className="btn-primary mt-5 h-12 w-full">
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
             {customer ? "Place order" : "Sign in to place your order"}
           </button>
+          )}
           <Link href="/cart" className="mt-3 block text-center text-sm font-semibold text-ink/70 hover:text-brand">
             Edit cart
           </Link>

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowRight, LogOut, PackageOpen } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { AuthPanel } from "@/components/account/AuthPanel";
+import { STATIC_DEMO } from "@/lib/api/client";
+import { PreviewNotice } from "@/components/account/PreviewNotice";
 import { fetchActivity, type Order } from "@/lib/api/account";
 import { formatKES } from "@/lib/format";
 import { whatsappLink } from "@/lib/contact";
@@ -54,9 +56,13 @@ export function AccountView() {
           <h1 className="mt-2 font-display text-4xl font-medium leading-tight tracking-[-0.015em] text-ink sm:text-5xl">Sign in to track your orders.</h1>
           <p className="mt-4 text-muted">See every plan application and cash order you&apos;ve placed, and where each one is.</p>
         </div>
-        <div className="mx-auto w-full max-w-md rounded-3xl bg-surface p-6 shadow-md sm:p-8">
-          <AuthPanel />
-        </div>
+        {STATIC_DEMO ? (
+          <PreviewNotice />
+        ) : (
+          <div className="mx-auto w-full max-w-md rounded-3xl bg-surface p-6 shadow-md sm:p-8">
+            <AuthPanel />
+          </div>
+        )}
       </div>
     );
   }
