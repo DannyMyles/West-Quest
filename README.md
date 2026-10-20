@@ -2,22 +2,24 @@
 
 A device financing storefront — smartphones and tablets on deposit, with daily
 payments over 6, 9 or 12 months. Built with Next.js 16 (App Router), React 19
-and Tailwind CSS v4, on top of a small Node.js + MariaDB backend (`backend/`).
+and Tailwind CSS v4. The Node.js + MariaDB backend is a separate project:
+`West-Quest-backend` (a sibling folder / its own repo).
 
 ## Getting started
 
 The storefront and admin dashboard read and write everything (products,
 categories, payment plans, applications, banners, reviews, photos) through the
-backend API, so start that first — see [`backend/README.md`](backend/README.md)
-for MariaDB setup, migrations, creating an admin and importing the catalogue.
+backend API, so start that first — see the `West-Quest-backend` README for
+MariaDB setup, migrations, creating an admin and importing the catalogue.
 
 ```bash
-# 1. backend (http://127.0.0.1:4000)
-cd backend && npm install && npm run migrate && npm run create-admin -- --email you@example.com --name "Your Name"
+# 1. backend (http://127.0.0.1:4000) — in the West-Quest-backend project
+cd ../West-Quest-backend && npm install && npm run migrate && npm run create-admin -- --email you@example.com --name "Your Name"
 npm run import-catalog
 npm run dev
 
-# 2. storefront (http://localhost:3000)
+# 2. storefront (http://localhost:3000) — in this project
+cd ../West-Quest
 cp .env.local.example .env.local      # BACKEND_URL points at the backend
 npm install
 npm run dev
@@ -76,7 +78,7 @@ To replace a photo, drop a new JPEG in at the same path
 | Admin dashboard | `src/app/admin/` |
 | Backend API client | `src/lib/api/`, `src/services/` |
 | Static preview snapshot + photo manifest | `src/data/`, `public/products/` |
-| Backend (Express + MariaDB): plans, applications, accounts, orders | `backend/` |
+| Backend (Express + MariaDB): plans, applications, accounts, orders | separate repo: `West-Quest-backend` |
 
 ## Scripts
 
