@@ -3,6 +3,7 @@ import { ArrowRight, MapPin, Phone, Clock } from "lucide-react";
 import { getCategories } from "@/services/categoryService";
 import { getProducts } from "@/services/productService";
 import { WhatsAppIcon } from "./WhatsAppButton";
+import Image from "next/image";
 import {
   WHATSAPP_NUMBER,
   SUPPORT_PHONE_DISPLAY,
@@ -88,7 +89,7 @@ export async function Footer() {
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-12 md:grid-cols-4 lg:grid-cols-[1.3fr_1fr_1.4fr_1fr_1.2fr] lg:gap-10">
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <span className="font-display text-3xl font-medium">West Quest</span>
+            <Image src="/brand/west-quest-logo-on-dark.svg" alt="West Quest Limited" width={890} height={680} unoptimized className="h-28 w-auto" />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
               Phones, tablets and more on a deposit, with small daily payments over 6, 9 or 12 months.
             </p>

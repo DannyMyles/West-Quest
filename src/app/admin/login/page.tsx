@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { adminLogin, adminMe } from "@/lib/api/auth";
@@ -61,7 +62,7 @@ function LoginCard() {
       <div className="tag-corner relative w-full max-w-sm border border-white/15 bg-surface/95 p-8 shadow-xl backdrop-blur">
         <span className="ledger-tick right-4 top-4 text-accent/60" />
         <div className="mb-6">
-          <span className="font-display text-2xl font-semibold text-brand">West Quest</span>
+          <BrandLogo />
           <p className="mt-3 text-xs text-muted">Sign in to manage the store</p>
         </div>
 

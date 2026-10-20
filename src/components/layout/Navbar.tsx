@@ -9,6 +9,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { SearchCommand } from "./SearchCommand";
 import { AccountButton, CartButton } from "./HeaderActions";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/cn";
 
 export function Navbar() {
@@ -57,11 +58,8 @@ export function Navbar() {
         )}
       >
         <div className="section flex h-16 items-center gap-4 lg:h-[72px]">
-          <Link href="/" aria-label="West Quest home" className="flex shrink-0 items-center gap-2">
-            <span aria-hidden className="tag-corner-sm flex h-8 w-8 items-center justify-center rounded-r-[8px] rounded-bl-[8px] bg-brand font-display text-lg font-semibold italic text-white">
-              W
-            </span>
-            <span className="font-display text-[22px] font-medium tracking-[-0.01em] text-ink sm:text-2xl">West Quest</span>
+          <Link href="/" aria-label="West Quest Limited — home" className="shrink-0">
+            <BrandLogo />
           </Link>
 
           <div className="hidden min-w-0 flex-1 lg:block">
@@ -232,7 +230,7 @@ export function Navbar() {
               className="fixed right-0 top-0 z-[60] flex h-full w-[86%] max-w-sm flex-col bg-surface shadow-2xl lg:hidden"
             >
               <div className="flex items-center justify-between border-b border-border px-4 py-4">
-                <span className="font-display text-xl font-medium text-ink">West Quest</span>
+                <BrandLogo />
                 <button
                   onClick={() => setMobileOpen(false)}
                   aria-label="Close menu"

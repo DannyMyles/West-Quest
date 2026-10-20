@@ -82,22 +82,25 @@ export function HeroCarousel() {
   const reduced = useReducedMotion();
   const count = banners.length;
 
-  const [index, setIndex] = useState(0);
+  // `prev` stays fully visible underneath while `index` fades in on top, so
+  // the cross-fade never shows the backdrop through two half-faded slides.
+  const [{ index, prev: previous }, setSlide] = useState({ index: 0, prev: -1 });
+  const show = useCallback((n: number) => setSlide((s) => (n === s.index ? s : { index: n, prev: s.index })), []);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [stopped, setStopped] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
-  const go = useCallback((next: number) => setIndex(((next % count) + count) % count), [count]);
+  const go = useCallback((next: number) => show(((next % count) + count) % count), [count, show]);
   const next = useCallback(() => go(index + 1), [go, index]);
   const prev = useCallback(() => go(index - 1), [go, index]);
 
   const playing = count > 1 && !reduced && !stopped && !hovered && !focused;
   useEffect(() => {
     if (!playing) return;
-    const id = window.setTimeout(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS);
+    const id = window.setTimeout(() => show((index + 1) % count), AUTOPLAY_MS);
     return () => window.clearTimeout(id);
-  }, [playing, index, count]);
+  }, [playing, index, count, show]);
 
   if (!loading && count === 0) return null;
   const current = banners[index];
@@ -129,7 +132,7 @@ export function HeroCarousel() {
         {loading && count === 0 && <div className="absolute inset-0 animate-shimmer" />}
 
         {banners.map((b, i) => (
-          <Slide key={b.id} banner={b} index={i} active={i === index} first={i === 0} label={`${i + 1} of ${count}`} reduced={reduced} />
+          <Slide key={b.id} banner={b} index={i} active={i === index} behind={i === previous} first={i === 0} label={`${i + 1} of ${count}`} reduced={reduced} />
         ))}
 
         {/* bottom bar: key facts (left) + slide controls (right) */}
@@ -272,12 +275,14 @@ interface SlideProps {
   banner: Banner;
   index: number;
   active: boolean;
+  /** The slide being faded over: held fully opaque beneath the active one. */
+  behind: boolean;
   first: boolean;
   label: string;
   reduced: boolean;
 }
 
-function Slide({ banner, index, active, first, label, reduced }: SlideProps) {
+function Slide({ banner, index, active, behind, first, label, reduced }: SlideProps) {
   const product = banner.layout === "product";
   const best = useBestPhoto(product ? (banner.images?.length ? banner.images : [banner.image]) : []);
   const palette = slidePalette(best?.tint ?? NEUTRAL_TONES[index % NEUTRAL_TONES.length]);
@@ -296,7 +301,10 @@ function Slide({ banner, index, active, first, label, reduced }: SlideProps) {
       aria-label={label}
       aria-hidden={!active}
       inert={!active}
-      className={cn("absolute inset-0 transition-opacity ease-out", motion, active ? "z-10 opacity-100" : "z-0 opacity-0")}
+      className={cn(
+        "absolute inset-0",
+        active ? cn("z-20 opacity-100 transition-opacity ease-out", motion) : behind ? "z-10 opacity-100" : "z-0 opacity-0"
+      )}
     >
       {product ? (
         // Tinted with the product's own colour: paper wash, ruled lines and a glow behind it.
